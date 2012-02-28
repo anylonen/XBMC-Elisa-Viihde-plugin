@@ -11,20 +11,16 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 username = __settings__.getSetting("username") 
 password = __settings__.getSetting("password") 
 
-login_url = "http://elisaviihde.fi/etvrecorder/default.sl?username="+username+"&password="+password+"&ajax"
+login_url = "http://elisaviihde.fi/etvrecorder/login.sl?username=" + username + "&password=" + password + "&savelogin=true&ajax=true"
 
 vkopaivat = {0:__language__(30006), 1:__language__(30007), 2:__language__(30008), 3:__language__(30009), 4:__language__(30010), 5:__language__(30011), 6:__language__(30012)}
  
 #logging in
 def login():
-  COOKIEFILE = 'special://profile/cookies.lwp'          # the path and filename that you want to use to save your cookies in
     
   urlopen = urllib2.urlopen
   cj = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
   Request = urllib2.Request
-
-  if os.path.isfile(COOKIEFILE):
-      cj.load(COOKIEFILE)
 
   opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
   urllib2.install_opener(opener)
@@ -34,8 +30,6 @@ def login():
 
   req = Request(login_url, txdata, txheaders)
   handle = urlopen(req)
-
-  cj.save(COOKIEFILE) 
              
 def get_params():
   param=[]
