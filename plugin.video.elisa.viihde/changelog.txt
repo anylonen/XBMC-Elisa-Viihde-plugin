@@ -1,0 +1,7 @@
+[B]0.0.2[/B]
+- Kansion latausta nopeutettu (josta johtuen muutoksia käyttöliittymän logiikkaan)
+- *-merkki ohjelman nimen edessä, jos sitä ei olla vielä katsottu
+- "eilen" ja "tänään" päivämäärän sijaan ohjelman nimessä
+
+[B]0.0.1[/B]
+- Initial version
