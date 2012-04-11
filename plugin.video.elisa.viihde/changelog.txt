@@ -1,3 +1,10 @@
+[B]0.0.4[/B]
+- Keksit palautettu ja polku muutettu
+- Tallenteen kuvaus/plot -teksti rivitetty nopeaa silmäystä varten
+
+[B]0.0.3[/B]
+- Keksit kommentoitu pois special:// -polun takia, jotta toimii
+
 [B]0.0.2[/B]
 - Kansion latausta nopeutettu (josta johtuen muutoksia käyttöliittymän logiikkaan)
 - *-merkki ohjelman nimen edessä, jos sitä ei olla vielä katsottu
