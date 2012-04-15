@@ -1,6 +1,6 @@
 XBMC-plugin Elisa Viihteelle
 
-http://palsta.elisa.fi/index.php?topic=3011.0
+https://github.com/anylonen/XBMC-Elisa-Viihde-plugin/wiki
 
 Alkuperäinen tekijä on zippoman, korjauksia tehnyt purtsi.
 
