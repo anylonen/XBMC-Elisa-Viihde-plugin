@@ -1,0 +1,6 @@
+# End of line is forced to be lf instead of crlf to all files
+* text eol=lf
+
+# .. unless they are images
+*.png binary
+*.jpg binary
