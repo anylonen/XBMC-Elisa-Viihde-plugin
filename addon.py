@@ -243,12 +243,12 @@ def watch_program(prog_id):
 
 def fix_chars(string):
     string = string.replace("%20", " ")
-    string = re.sub('%C3%A4','\u00E4',string) #ä
-    string = re.sub('%C3%B6','\u00F6',string) #ö
-    string = re.sub('%C3%A5','\u00E5',string) #å
-    string = re.sub('%C3%84','\u00C4',string) #Ä
-    string = re.sub('%C3%96','\u00D6',string) #Ö
-    string = re.sub('%C3%85','\u00C5',string) #Å
+    string = re.sub('%C3%A4','\u00E4',string) #\E4
+    string = re.sub('%C3%B6','\u00F6',string) #\F6
+    string = re.sub('%C3%A5','\u00E5',string) #\E5
+    string = re.sub('%C3%84','\u00C4',string) #\C4
+    string = re.sub('%C3%96','\u00D6',string) #\D6
+    string = re.sub('%C3%85','\u00C5',string) #\C5
     string = re.sub('%2C', ',',string) #pilkku
     string = re.sub('%26', '&',string) #&
     string = re.sub('%3F', '?',string) #?
@@ -305,6 +305,8 @@ def show_dir(id):
         else:
             date_name = str(vkopaivat[weekday_numb]) + " " + time.strftime("%d.%m.%Y %H:%M", parsed_time)
 
+        date_string = time.strftime("%Y-%m-%d", parsed_time)
+
         name = print_star + row['name'] + " (" + row['channel'] + ", " + date_name + ")"
 
         link = add_watch_link(name,
@@ -312,7 +314,7 @@ def show_dir(id):
                    playcount=row['viewcount'],
                    totalItems=totalItems,
                    duration=row['length'],
-                   date=date_name
+                   date=date_string
                    )
         t = UpdateProgramDataThread(row['program_id'],
                                 link)
