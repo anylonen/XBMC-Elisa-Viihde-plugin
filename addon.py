@@ -204,6 +204,18 @@ def add_watch_link(name, progid, totalItems=None, **kwargs):
 
 def get_prog_data(prog_id):
     prog_url = "http://elisaviihde.fi/etvrecorder/program.sl?programid=" + str(prog_id) + "&ajax"
+    # Limit concurrent download threads to 60
+    # It there are too many threads (depending on hardware and OS)
+    # the master Python process will stop execution and whole plugin fails.
+    #
+    # Also it seems that Elisa.fi is throttling concurrent requests from
+    # same client, so better not bombard them with over 300 requests per
+    # second anyway.
+    #
+    # Best solution would be a thread pool, but this quick hack
+    # "while sleep" solves the problem too.
+    while threading.active_count() > 60:
+        time.sleep(2)
     req = urllib2.Request(prog_url)
     response = urllib2.urlopen(req)
     link = response.read()
