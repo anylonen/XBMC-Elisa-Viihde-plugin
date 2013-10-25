@@ -21,7 +21,6 @@ if REMOTE_DBG:
         import pysrc.pydevd as pydevd
         # stdoutToServer and stderrToServer redirect stdout and stderr to eclipse console
         pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
-
     except ImportError:
         sys.stderr.write("Error: " + 
         "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
