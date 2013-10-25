@@ -22,8 +22,8 @@ if REMOTE_DBG:
         # stdoutToServer and stderrToServer redirect stdout and stderr to eclipse console
         pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
     except ImportError:
-        sys.stderr.write("Error: " + 
-        "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
+        sys.stderr.write("Error: " +
+                         "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
         sys.exit(1)
 try:
     import xbmc
@@ -33,9 +33,10 @@ try:
     import simplejson
     __settings__ = xbmcaddon.Addon(id='plugin.video.elisa.viihde')
     __language__ = __settings__.getLocalizedString
-    BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( __settings__.getAddonInfo('path'), "resources" ) )
-    sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-    vkopaivat = {0:__language__(30006), 1:__language__(30007), 2:__language__(30008), 3:__language__(30009), 4:__language__(30010), 5:__language__(30011), 6:__language__(30012)}
+    BASE_RESOURCE_PATH = xbmc.translatePath(os.path.join(__settings__.getAddonInfo('path'), "resources"))
+    sys.path.append(os.path.join(BASE_RESOURCE_PATH, "lib"))
+    vkopaivat = {0: __language__(30006), 1: __language__(30007), 2: __language__(30008), 3: __language__(
+        30009), 4: __language__(30010), 5: __language__(30011), 6: __language__(30012)}
 except ImportError:
     pass
 
@@ -47,6 +48,7 @@ time_format = "%d.%m.%Y %H:%M:%S"
 
 
 class UpdateProgramDataThread(threading.Thread):
+
     def __init__(self, prgid, link):
         self.prgid = prgid
         self.link = link
@@ -57,13 +59,16 @@ class UpdateProgramDataThread(threading.Thread):
         if prog_data.get('tn'):
             self.link.setThumbnailImage(prog_data['tn'])
         self.link.setInfo('video', dict(plotoutline=prog_data['short_text'],
-                                   plot=prog_data['short_text'],
-                                   ))
+                                        plot=prog_data['short_text'],
+                                        ))
+
 
 def get_login_url(username, password):
     return "http://elisaviihde.fi/etvrecorder/login.sl?username=" + username + "&password=" + password + "&savelogin=true&ajax=true"
 
 #logging in
+
+
 def login(username=None, password=None):
     if 'xbmc' in globals():
         COOKIEFILE = xbmc.translatePath('special://profile/addon_data/plugin.video.elisa.viihde/cookies.lwp')
@@ -72,58 +77,59 @@ def login(username=None, password=None):
     if username == None:
         username = __settings__.getSetting("username")
     if password == None:
-        password = __settings__.getSetting("password") 
+        password = __settings__.getSetting("password")
 
     urlopen = urllib2.urlopen
     cj = cookielib.LWPCookieJar()       # This is a subclass of FileCookieJar that has useful load and save methods
     Request = urllib2.Request
-    
+
     if os.path.isfile(COOKIEFILE):
         cj.load(COOKIEFILE)
 
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     urllib2.install_opener(opener)
-    
-    txdata = None                                                                           
-    txheaders =  {'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}  
-    
+
+    txdata = None
+    txheaders = {'User-agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
+
     login_url = get_login_url(username, password)
     req = Request(login_url, txdata, txheaders)
     handle = urlopen(req)
 
     if COOKIEFILE:
-        cj.save(COOKIEFILE) 
-             
+        cj.save(COOKIEFILE)
+
+
 def get_params():
-    param=[]
-    paramstring=sys.argv[2]
-    if len(paramstring)>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'):
-            params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
+    param = []
+    paramstring = sys.argv[2]
+    if len(paramstring) >= 2:
+        params = sys.argv[2]
+        cleanedparams = params.replace('?', '')
+        if (params[len(params) - 1] == '/'):
+            params = params[0:len(params) - 2]
+        pairsofparams = cleanedparams.split('&')
+        param = {}
         for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2:
-                param[splitparams[0]]=splitparams[1]
+            splitparams = {}
+            splitparams = pairsofparams[i].split('=')
+            if (len(splitparams)) == 2:
+                param[splitparams[0]] = splitparams[1]
     return param
 
 
 def add_search():
-    u=sys.argv[0]+"?search="+str('indiana')
+    u = sys.argv[0] + "?search=" + str('indiana')
     print "Search: " + u
-    liz=xbmcgui.ListItem(label=__language__(30017), iconImage="DefaultFolder.png")
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+    liz = xbmcgui.ListItem(label=__language__(30017), iconImage="DefaultFolder.png")
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return liz
 
 
 def parse_datetime(dtstring, format="%d.%m.%Y %H:%M"):
     """
     Parse a datetime object from datetime string.
-    
+
     @param dtstring: The datetime string
     @param format: excepted format of parse string
     e.g. 'Su 05.05.2012 12:00'
@@ -132,7 +138,7 @@ def parse_datetime(dtstring, format="%d.%m.%Y %H:%M"):
     if len(parts) > 2:
         dtstring = ' '.join(parts[-2:])
     parsestr = time.strptime
-    print "DATETIME parsing %s, %s" % (dtstring, format) 
+    print "DATETIME parsing %s, %s" % (dtstring, format)
     parsed_time = parsestr(dtstring, format)
     return datetime.datetime.fromtimestamp(time.mktime(parsed_time))
 
@@ -150,7 +156,7 @@ def search_items(qstr):
     req = urllib2.Request(prog_url)
     response = urllib2.urlopen(req)
     search_html = response.read()
-    search_html= fix_chars(search_html)
+    search_html = fix_chars(search_html)
     # parse the search data from html
     search_data = BeautifulSoup.BeautifulSoup(search_html)
     rows = []
@@ -185,17 +191,17 @@ def show_search_items(qstr):
                               )
 
 
-def add_dir(name,id,iconimage):
-    u=sys.argv[0]+"?id="+str(id)
-    liz=xbmcgui.ListItem(label=name,iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    liz.setInfo('video', { "Title": name } )
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+def add_dir(name, id, iconimage):
+    u = sys.argv[0] + "?id=" + str(id)
+    liz = xbmcgui.ListItem(label=name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz.setInfo('video', {"Title": name})
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return liz
 
 
 def add_watch_link(name, progid, totalItems=None, **kwargs):
     u = sys.argv[0] + "?watch=true&progid=" + str(progid)
-    liz=xbmcgui.ListItem(name)
+    liz = xbmcgui.ListItem(name)
     kwargs['Title'] = name
     liz.setInfo('video', kwargs)
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, totalItems=totalItems)
@@ -235,7 +241,7 @@ def create_name(prog_data):
     elif diff.days == 1:
         date_name = __language__(30014) + " " + time.strftime("%H:%M", parsed_time)
     else:
-        date_name = str(vkopaivat[weekday_numb])+" "+time.strftime("%d.%m.%Y %H:%M",parsed_time)
+        date_name = str(vkopaivat[weekday_numb]) + " " + time.strftime("%d.%m.%Y %H:%M", parsed_time)
     return prog_data['name'] + " (" + prog_data['channel'] + ", " + date_name + ")"
 
 
@@ -255,23 +261,23 @@ def watch_program(prog_id):
 
 def fix_chars(string):
     string = string.replace("%20", " ")
-    string = re.sub('%C3%A4','\u00E4',string) #\E4
-    string = re.sub('%C3%B6','\u00F6',string) #\F6
-    string = re.sub('%C3%A5','\u00E5',string) #\E5
-    string = re.sub('%C3%84','\u00C4',string) #\C4
-    string = re.sub('%C3%96','\u00D6',string) #\D6
-    string = re.sub('%C3%85','\u00C5',string) #\C5
-    string = re.sub('%2C', ',',string) #pilkku
-    string = re.sub('%26', '&',string) #&
-    string = re.sub('%3F', '?',string) #?
-    string = re.sub('%3A', ':',string) #:
-    string = re.sub('%2F', '/',string) #/
+    string = re.sub('%C3%A4', '\u00E4', string) #\E4
+    string = re.sub('%C3%B6', '\u00F6', string) #\F6
+    string = re.sub('%C3%A5', '\u00E5', string) #\E5
+    string = re.sub('%C3%84', '\u00C4', string) #\C4
+    string = re.sub('%C3%96', '\u00D6', string) #\D6
+    string = re.sub('%C3%85', '\u00C5', string) #\C5
+    string = re.sub('%2C', ',', string) #pilkku
+    string = re.sub('%26', '&', string) #&
+    string = re.sub('%3F', '?', string) #?
+    string = re.sub('%3A', ':', string) #:
+    string = re.sub('%2F', '/', string) #/
     return string
 
 
 def show_dir(id):
-    if str(id)=="0":
-        #show root directory     
+    if str(id) == "0":
+        #show root directory
         folder_id = ""
         add_search()
     else:
@@ -289,7 +295,7 @@ def show_dir(id):
     data = data['ready_data']
     data = data.pop()
     totalItems = len(data['folders']) + len(data['recordings'])
-    #list folders      
+    #list folders
     for row in data['folders']:
         name = row['name']
         id = row['id']
@@ -322,37 +328,37 @@ def show_dir(id):
         name = print_star + row['name'] + " (" + row['channel'] + ", " + date_name + ")"
 
         link = add_watch_link(name,
-                   row['program_id'],
-                   playcount=row['viewcount'],
-                   totalItems=totalItems,
-                   duration=row['length'],
-                   date=date_string
-                   )
+                              row['program_id'],
+                              playcount=row['viewcount'],
+                              totalItems=totalItems,
+                              duration=row['length'],
+                              date=date_string
+                              )
         t = UpdateProgramDataThread(row['program_id'],
-                                link)
+                                    link)
         t.start()
 
 
 def mainloop():
     #check login
     username = __settings__.getSetting("username")
-    password = __settings__.getSetting("password") 
+    password = __settings__.getSetting("password")
     response = urllib2.urlopen(get_login_url(username, password))
     link = response.read()
-    
+
     if not str(link) == "TRUE":
         dialog = xbmcgui.Dialog()
         ok = dialog.ok('XBMC', __language__(30003), __language__(30004))
         if ok == True:
             __settings__.openSettings(url=sys.argv[0])
-    
+
     else:
         login()
         params = get_params()
-    
+
         #dialog = xbmcgui.Dialog()
         #ok = dialog.ok('XBMC', str(params))
-    
+
         folder_id = None
         prog_id = None
         watch = None
@@ -361,24 +367,24 @@ def mainloop():
             folder_id = int(params["id"])
         except:
             pass
-        
+
         try:
             prog_id = int(params["progid"])
         except:
             pass
-        
+
         try:
             watch = str(params["watch"])
         except:
             pass
-        
+
         try:
             search = str(params["search"])
             print "Searching for " + search
         except:
             pass
-        
-        if search <> None:
+
+        if search != None:
             keyboard = xbmc.Keyboard()
             keyboard.doModal()
             if (keyboard.isConfirmed()):
@@ -386,14 +392,13 @@ def mainloop():
 
         elif folder_id == None and prog_id == None:
             show_dir("0")
-        elif prog_id == None and folder_id <> None:
+        elif prog_id == None and folder_id != None:
             show_dir(str(folder_id))
-        elif watch == "true" and prog_id <> None:
+        elif watch == "true" and prog_id != None:
             watch_program(str(prog_id))
         else:
             show_dir("0")
-    
-    
+
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
