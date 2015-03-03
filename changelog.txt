@@ -1,3 +1,6 @@
+[B]0.1.0[/B]
+- Switched to use enyone/elisaviihde Python API
+
 [B]0.0.6[/B]
 - Fixed date format and plugin crash bugs. (OttoK)
 - Plugin now compatible with latest OpenElec 3.0.0 and should work better for all other XBMC users too. (OttoK)

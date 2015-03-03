@@ -1,8 +1,8 @@
 XBMC-plugin Elisa Viihteelle
 
-https://github.com/anylonen/XBMC-Elisa-Viihde-plugin/wiki
+https://github.com/enyone/XBMC-Elisa-Viihde-plugin
 
-Original author is zippoman. Fixes and changes are done by purtsi, teerytko, anylonen and ottok.
+Original author is zippoman. Fixes and changes are done by purtsi, teerytko, anylonen, ottok and enyone.
 
 
 
