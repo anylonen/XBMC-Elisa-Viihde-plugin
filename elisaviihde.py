@@ -1,6 +1,7 @@
 # Elisa Viihde API Python implementation
 # License: GPLv3
 # Author: Juho Tykkala
+# Version: 1.1b
 
 import requests, json, re, time, datetime
 
@@ -76,6 +77,7 @@ class elisaviihde:
                                     headers={"X-Requested-With": "XMLHttpRequest"},
                                     verify=self.verifycerts)
       self.checkrequest(logincheck.status_code)
+      self.inited = True
       return True
     except Exception as err:
       return False
