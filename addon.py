@@ -173,7 +173,10 @@ def show_dir(id):
                               )
 
 def mainloop():
-    elisa.setsession(json.loads(__settings__.getSetting("session")))
+    try:
+        elisa.setsession(json.loads(__settings__.getSetting("session")))
+    except ValueError as ve:
+        __settings__.setSetting("session", "{}")
     
     if not elisa.islogged():
         dialog = xbmcgui.Dialog()
