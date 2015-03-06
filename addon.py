@@ -32,7 +32,6 @@ try:
     import xbmcplugin
     import xbmcgui
     import xbmcaddon
-    import simplejson
     __settings__ = xbmcaddon.Addon(id='plugin.video.elisa.viihde')
     __language__ = __settings__.getLocalizedString
     BASE_RESOURCE_PATH = xbmc.translatePath(os.path.join(__settings__.getAddonInfo('path'), "resources"))
