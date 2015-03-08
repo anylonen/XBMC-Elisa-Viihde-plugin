@@ -7,7 +7,6 @@ import time
 import datetime
 import threading
 import json
-import elisaviihde
 
 # Elisa session
 elisa = None
@@ -32,15 +31,14 @@ try:
     import xbmcplugin
     import xbmcgui
     import xbmcaddon
+    import elisaviihde
     __settings__ = xbmcaddon.Addon(id='plugin.video.elisa.viihde')
     __language__ = __settings__.getLocalizedString
-    BASE_RESOURCE_PATH = xbmc.translatePath(os.path.join(__settings__.getAddonInfo('path'), "resources"))
-    sys.path.append(os.path.join(BASE_RESOURCE_PATH, "lib"))
     vkopaivat = {0: __language__(30006), 1: __language__(30007), 2: __language__(30008), 3: __language__(
         30009), 4: __language__(30010), 5: __language__(30011), 6: __language__(30012)}
         
-except ImportError:
-    pass
+except ImportError as err:
+    sys.stderr.write(str(err))
 
 # Init Elisa
 elisa = elisaviihde.elisaviihde(False)
