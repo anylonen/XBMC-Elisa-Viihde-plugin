@@ -32,7 +32,6 @@ try:
     import xbmcplugin
     import xbmcgui
     import xbmcaddon
-    import simplejson
     __settings__ = xbmcaddon.Addon(id='plugin.video.elisa.viihde')
     __language__ = __settings__.getLocalizedString
     BASE_RESOURCE_PATH = xbmc.translatePath(os.path.join(__settings__.getAddonInfo('path'), "resources"))
@@ -63,26 +62,6 @@ def get_params():
             if (len(splitparams)) == 2:
                 param[splitparams[0]] = splitparams[1]
     return param
-
-def add_search():
-    u = sys.argv[0] + "?search=" + str('indiana')
-    liz = xbmcgui.ListItem(label=__language__(30017), iconImage="DefaultFolder.png")
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
-    return liz
-
-def search_items(qstr):
-    rows = []
-    # TODO: Implement search
-    # rows.append(prog_id)
-    return rows
-
-def show_search_items(qstr):
-    items = search_items(qstr)
-    for item in items:
-        name = create_name(elisa.getprogram(item))
-        link = add_watch_link(name,
-                              item,
-                              totalItems=len(items))
 
 def add_dir(name, id, iconimage):
     u = sys.argv[0] + "?id=" + str(id)
@@ -127,8 +106,6 @@ def show_dir(id):
     if str(id) == "0":
         # Show root directory
         folder_id = 0
-        # TODO: Implement search first
-        # add_search()
     else:
         # Show directory by id
         folder_id = int(id)
@@ -160,7 +137,7 @@ def show_dir(id):
         else:
             date_name = str(vkopaivat[weekday_numb]) + " " + time.strftime("%d.%m.%Y %H:%M", parsed_time)
 
-        date_string = time.strftime("%Y-%m-%d", parsed_time)
+        date_string = time.strftime("%d.%m.%Y", parsed_time)
 
         name = row['name'] + " (" + row['channel'] + ", " + date_name + ")"
         
@@ -169,8 +146,12 @@ def show_dir(id):
                               playcount=1 if row['isWatched'] else 0,
                               totalItems=totalItems,
                               duration=((row["endTimeUTC"]/1000/60) - (row["startTimeUTC"]/1000/60)),
-                              date=date_string
+                              date=date_string,
+                              plotoutline=(row['description'] if "description" in row else "XX"),
+                              plot=(row['description'] if "description" in row else "XX")
                               )
+        if "thumbnail" in row:
+          link.setThumbnailImage(row['thumbnail'])
 
 def mainloop():
     try:

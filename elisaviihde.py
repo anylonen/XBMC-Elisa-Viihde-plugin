@@ -1,9 +1,10 @@
 # Elisa Viihde API Python implementation
 # License: GPLv3
 # Author: Juho Tykkala
-# Version: 1.1b
+# Version: 1.1
+# https://github.com/enyone/elisaviihde
 
-import requests, json, re, time, datetime
+import requests, json, re, time, datetime, math
 
 class elisaviihde:
   # Init args
@@ -113,32 +114,68 @@ class elisaviihde:
   def setsession(self, cookies):  
     self.session.cookies=requests.utils.cookiejar_from_dict(cookies)
   
+  def walk(self, tree, parent=None):
+    # Walk folder tree recursively
+    flat = []
+    subtree = None
+    if "folders" in tree:
+      if len(tree["folders"]) > 0:
+        subtree = tree["folders"]
+      del tree["folders"]
+    if "id" in tree:
+      tree["parentFolder"] = parent if tree["id"] > 0 else None
+      flat.append(tree)
+    if subtree:
+      for folder in subtree:
+        flat += self.walk(folder, (tree["id"] if "id" in tree else 0))
+    return flat
+  
   def getfolders(self, folderid=0):
-    # Get recording folders
-    if self.verbose: print "Getting folder info..."
+    # Get folders
+    if self.verbose: print "Getting folders..."
     self.checklogged()
-    # TODO: Implement recursive folder walk
-    if folderid != 0:
-      return []
     folders = self.session.get(self.baseurl + "/tallenteet/api/folders",
                                headers={"X-Requested-With": "XMLHttpRequest"},
                                verify=self.verifycerts)
     self.checkrequest(folders.status_code)
-    return folders.json()["folders"][0]["folders"]
+    return [folder for folder in self.walk(folders.json()) if folder["parentFolder"] == folderid]
   
-  def getrecordings(self, folderid=0, page=0, sortby="startTime", sortorder="desc", status="all"):
-    # Get recordings from first folder
+  def getfolderstatus(self, folderid=0):
+    # Get folder info
+    if self.verbose: print "Getting folder info..."
     self.checklogged()
-    if self.verbose: print "Getting recording info..."
-    recordings = self.session.get(self.baseurl + "/tallenteet/api/recordings/" + str(folderid)
-                                    + "?page=" + str(page)
-                                    + "&sortBy=" + str(sortby)
-                                    + "&sortOrder=" + str(sortorder)
-                                    + "&watchedStatus=" + str(status),
-                                  headers={"X-Requested-With": "XMLHttpRequest"},
-                                  verify=self.verifycerts)
-    self.checkrequest(recordings.status_code)
-    return recordings.json()
+    folder = self.session.get(self.baseurl + "/tallenteet/api/folder/" + str(folderid),
+                               headers={"X-Requested-With": "XMLHttpRequest"},
+                               verify=self.verifycerts)
+    self.checkrequest(folder.status_code)
+    return folder.json()
+  
+  def getrecordings(self, folderid=0, page=None, sortby="startTime", sortorder="desc", status="all"):
+    # Get recordings from folder
+    self.checklogged()
+    if self.verbose: print "Getting recordings..."
+    recordings = []
+    if page == None:
+      folder = self.getfolderstatus(folderid)
+      # Append rest of pages to list (50 recordings per page)
+      maxpage = int(math.floor(folder["recordingsCount"] / 50))
+      if maxpage > 0:
+        pages = range(0, maxpage)
+      else:
+        pages = [0]
+    else:
+      pages = [page]
+    for pageno in pages:
+      recordingspp = self.session.get(self.baseurl + "/tallenteet/api/recordings/" + str(folderid)
+                                        + "?page=" + str(pageno)
+                                        + "&sortBy=" + str(sortby)
+                                        + "&sortOrder=" + str(sortorder)
+                                        + "&watchedStatus=" + str(status),
+                                      headers={"X-Requested-With": "XMLHttpRequest"},
+                                      verify=self.verifycerts)
+      self.checkrequest(recordingspp.status_code)
+      recordings += recordingspp.json()
+    return recordings
   
   def getprogram(self, programid=0):
     # Parse program information
