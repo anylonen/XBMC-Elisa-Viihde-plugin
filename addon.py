@@ -85,7 +85,6 @@ def show_dir(dirid=0):
     # List recordings
     for row in data:
         name = create_name(row)
-        
         add_watch_link(name,
                        row['programId'],
                        totalItems,
@@ -93,7 +92,7 @@ def show_dir(dirid=0):
                          "title": name,
                          "date": datetime.datetime.fromtimestamp(row["startTimeUTC"]/1000).strftime("%d.%m.%Y"),
                          "duration": ((row["endTimeUTC"]/1000/60) - (row["startTimeUTC"]/1000/60)),
-                         "plot": (row['description'] if "description" in row else "N/a"),
+                         "plotoutline": (row['description'] if "description" in row else "N/a").encode('utf8'),
                          "playcount": (1 if row['isWatched'] else 0),
                          "iconimage": (row['thumbnail'] if "thumbnail" in row else "DefaultVideo.png")
                        })
