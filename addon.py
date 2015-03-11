@@ -91,7 +91,7 @@ def show_dir(dirid=0):
                        kwargs = {
                          "title": name,
                          "duration": ((row["endTimeUTC"]/1000/60) - (row["startTimeUTC"]/1000/60)),
-                         "plotoutline": "thjyh",
+                         "plotoutline": (row['description'] if "description" in row else "N/a"),
                          "playcount": (1 if row['isWatched'] else 0),
                          "iconImage": (row['thumbnail'] if "thumbnail" in row else "DefaultVideo.png")
                        })
