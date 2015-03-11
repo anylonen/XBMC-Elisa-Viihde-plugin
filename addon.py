@@ -33,8 +33,9 @@ try:
     import elisaviihde
     __settings__ = xbmcaddon.Addon(id='plugin.video.elisa.viihde')
     __language__ = __settings__.getLocalizedString
-    vkopaivat = {0: __language__(30006), 1: __language__(30007), 2: __language__(30008), 3: __language__(
-        30009), 4: __language__(30010), 5: __language__(30011), 6: __language__(30012)}
+    weekdays = {0: __language__(30006), 1: __language__(30007), 2: __language__(30008),
+                3: __language__(30009), 4: __language__(30010), 5: __language__(30011),
+                6: __language__(30012)}
 except ImportError as err:
     sys.stderr.write(str(err))
 
@@ -61,7 +62,7 @@ def get_params():
 def create_name(prog_data):
     time_raw = prog_data["startTimeUTC"]/1000
     parsed_time = datetime.datetime.fromtimestamp(time_raw).strftime("%d.%m.%Y %H:%M:%S")
-    weekday_numb = int(datetime.datetime.fromtimestamp(time_raw).strftime("%w"))
+    weekday_number = int(datetime.datetime.fromtimestamp(time_raw).strftime("%w"))
     prog_date = datetime.date.fromtimestamp(time_raw)
     today = datetime.date.today()
     diff = today - prog_date
@@ -70,7 +71,7 @@ def create_name(prog_data):
     elif diff.days == 1:
         date_name = __language__(30014) + " " + datetime.datetime.fromtimestamp(time_raw).strftime("%H:%M")
     else:
-        date_name = str(vkopaivat[weekday_numb]) + " " + datetime.datetime.fromtimestamp(time_raw).strftime("%d.%m.%Y %H:%M")
+        date_name = str(weekdays[weekday_number]) + " " + datetime.datetime.fromtimestamp(time_raw).strftime("%d.%m.%Y %H:%M")
     return prog_data['name'] + " (" + prog_data['serviceName'] + ", " + date_name + ")"
 
 def show_dir(dirid=0):
@@ -90,10 +91,11 @@ def show_dir(dirid=0):
                        totalItems,
                        kwargs = {
                          "title": name,
+                         "date": datetime.datetime.fromtimestamp(row["startTimeUTC"]/1000).strftime("%d.%m.%Y"),
                          "duration": ((row["endTimeUTC"]/1000/60) - (row["startTimeUTC"]/1000/60)),
-                         "plotoutline": (row['description'] if "description" in row else "N/a"),
+                         "plot": (row['description'] if "description" in row else "N/a"),
                          "playcount": (1 if row['isWatched'] else 0),
-                         "iconImage": (row['thumbnail'] if "thumbnail" in row else "DefaultVideo.png")
+                         "iconimage": (row['thumbnail'] if "thumbnail" in row else "DefaultVideo.png")
                        })
 
 def add_dir_link(name, dirid):
@@ -105,7 +107,7 @@ def add_dir_link(name, dirid):
 
 def add_watch_link(name, progid, totalItems=None, kwargs={}):
     u = sys.argv[0] + "?progid=" + str(progid) + "&watch=" + json.dumps(kwargs).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-    liz = xbmcgui.ListItem(name, iconImage=kwargs["iconImage"])
+    liz = xbmcgui.ListItem(name, iconImage=kwargs["iconimage"])
     liz.setInfo('video', kwargs)
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, totalItems=totalItems)
     return liz
