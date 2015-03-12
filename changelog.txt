@@ -1,3 +1,6 @@
+[B]0.1.1[/B]
+- Added support for thumbnail images, also cleaned source code wishing speed improvements.
+
 [B]0.1.0[/B]
 - Switched to use enyone/elisaviihde Python API
 
