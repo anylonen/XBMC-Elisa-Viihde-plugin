@@ -2,7 +2,7 @@
 <addon id="plugin.video.elisa.viihde" name="Elisa Viihde" version="0.1.1" provider-name="zippoman, purtsi, teerytko, anylonen, enyone">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
-        <import addon="script.module.elisaviihde" version="1.2"/>
+        <import addon="script.module.elisaviihde" version="1.2.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
