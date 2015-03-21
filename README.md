@@ -1,9 +1,10 @@
-XBMC-plugin Elisa Viihteelle
+KODI/XBMC-plugin Elisa Viihteelle
+=====
 
-https://github.com/anylonen/XBMC-Elisa-Viihde-plugin/wiki
+https://github.com/enyone/XBMC-Elisa-Viihde-plugin
 
-Original author is zippoman. Fixes and changes are done by purtsi, teerytko, anylonen and ottok.
+Käyttää uutta beta.elisaviihde.fi rajapintaa https://github.com/enyone/elisaviihde kirjaston avulla.
 
+Pluginin alkuperäinen toteuttaja: **zippoman**
 
-
-
+Korjauksia ja muutoksia toteuttaneet: **purtsi**, **teerytko**, **anylonen**, **ottok**, **enyone**
