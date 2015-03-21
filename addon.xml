@@ -15,7 +15,7 @@
         <description lang="en">This XBMC plugin enables viewing Elisa Viihde recordings</description>
         <description lang="fi">Tämän XBMC-pluginin avulla voit katsella Elisa Viihde-tallenteita</description>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <website>https://github.com/enyone/XBMC-Elisa-Viihde-plugin</website>
-        <source>https://github.com/enyone/XBMC-Elisa-Viihde-plugin.git</source>
+        <website>https://github.com/anylonen/XBMC-Elisa-Viihde-plugin</website>
+        <source>https://github.com/anylonen/XBMC-Elisa-Viihde-plugin.git</source>
     </extension>
 </addon>
